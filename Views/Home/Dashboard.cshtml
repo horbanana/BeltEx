@@ -1,0 +1,60 @@
+
+<header>
+    <a style="float:right;" class="btn btn-danger" href="/logout">Logout</a>
+    <h1 class="center">Dojo Activity Center</h1> 
+    <h3>Welcome, @ViewBag.User.Name!</h3>
+</header>
+
+
+<table style="margin-top:50px;" class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Activity</th>
+      <th scope="col">Date and Time</th>
+      <th scope="col">Duration</th>
+      <th scope="col">Event Coordinator</th>
+      <th scope="col"># of Participants</th> 
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+   @foreach(var a in ViewBag.AllActivities)
+      {
+          <tr>
+            <th><a href="/About/@a.ActivityId">@a.Title</a></th>
+            <td>@a.Date</td>
+            <td>@a.Duration @a.DurationStr</td>
+            <td>@a.Coordinator.Name</td>
+            <td>@a.JoiningUser.Count</td>
+            <td>
+                @if(@a.Coordinator.UserId == @ViewBag.User.UserId)
+                {
+                    <a href="/Delete/@a.ActivityId">Delete</a>
+                }
+                else
+                {
+                    var isIn = false;
+                    @foreach (var act in @ViewBag.User.JoiningActivity)
+                    {
+                        
+                        @if(a.ActivityId == act.ActivityId)
+                        {
+                        isIn = true;
+
+                        }
+                        
+                    }
+                    @if(isIn == true)
+                        {
+                        <a href="/Leave/@ViewBag.User.UserId/@a.ActivityId">Leave</a>
+                        }
+                    else{
+                        <a href="/Join/@ViewBag.User.UserId/@a.ActivityId">Join</a>
+                    }
+                }
+            </td>
+          </tr>
+      }
+  <tbody>
+</table>
+<a href="/NewActivityPage" class="btn btn-success">+ New Activity</a>

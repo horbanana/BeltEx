@@ -1,0 +1,45 @@
+
+<header>
+    <a style="float:right;" class="btn btn-danger" href="/logout">Logout</a>
+    <a style="float:right; margin-right:10px;" class="btn btn-secondary" href="/Dashboard">Home</a>
+    <h1 class="center">Dojo Activity Center</h1> 
+</header>
+<h2 >@ViewBag.ActivitieWithGuests.Title</h2>
+
+    @{
+        @if(@ViewBag.ActivitieWithGuests.UserId == @ViewBag.User.UserId)
+        {
+             <a style="margin: 5px" 5px; class="btn btn-info" href="/Delete/@ViewBag.ActivitieWithGuests.ActivityId">Delete</a>
+        }
+       
+       else
+       {
+        bool isIn = false;
+            @foreach (var act in @ViewBag.ActivitieWithGuests.JoiningUser)
+            {
+                
+                @if(act.UserId == @ViewBag.User.UserId)
+                {
+                    isIn = true;
+                }
+                
+            }
+            @if(isIn == true)
+            {
+                <a style="margin: 5px;"class="btn btn-info" href="/Leave/@ViewBag.User.UserId/@ViewBag.ActivitieWithGuests.ActivityId">Leave</a>
+            }
+            else
+            {
+                <a style="margin: 5px;" class="btn btn-info" href="/Join/@ViewBag.User.UserId/@ViewBag.ActivitieWithGuests.ActivityId">Join</a>
+            }
+       }
+    }
+<p style="color: #006400">Event Coordinator: </p>
+<p>@ViewBag.Coordinator.Name</p>
+<p style="color: #006400">Description:</p>
+<p>@ViewBag.ActivitieWithGuests.Description</p>
+<p style="color: #006400">Participants:</p>
+   @foreach(var guest in ViewBag.ActivitieWithGuests.JoiningUser)
+    {
+        <p> @guest.User.Name </p>
+    }
